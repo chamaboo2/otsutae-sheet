@@ -15,23 +15,32 @@ st.set_page_config(page_title="おつたえシート", page_icon="💬", layout=
 st.markdown(
     """
 <style>
-  .stApp { background: #f7fbfd; color: #18324f; }
-  .block-container { max-width: 720px; padding: 1.5rem 1rem 4rem; }
+  .stApp { background: #eef7fb; color: #172f4c; }
+  [data-testid="stHeader"] { background: transparent; }
+  [data-testid="stToolbar"] { display:none; }
+  .block-container { max-width: 410px; min-height:100vh; padding: .55rem 1.05rem 2.5rem; background:#fff; box-shadow:0 2px 24px #58768b2b; border-left:1px solid #deebf1; border-right:1px solid #deebf1; }
   h1, h2, h3 { color: #15395f; letter-spacing: .02em; }
-  .hero { text-align:center; padding: 2.2rem 1.2rem 1.6rem; background:linear-gradient(180deg,#eaf7ff,#f7fbfd); border-radius:28px; }
-  .hero-icon { width:74px; height:74px; margin:auto; display:grid; place-items:center; border-radius:24px; background:white; font-size:38px; box-shadow:0 8px 26px #b9d8ed66; }
-  .hero h1 { margin:.8rem 0 .25rem; font-size:2.15rem; }
-  .lead { font-size:1.14rem; line-height:1.85; color:#315a75; }
-  .small-note { text-align:center; color:#668096; font-size:.9rem; margin-top:1rem; }
+  .hero { text-align:center; margin:0 -1.05rem; padding: 1.1rem 1.25rem .3rem; background:linear-gradient(180deg,#e7f5ff 0%,#f1faff 80%,#fff 100%); }
+  .hero-icon { width:59px; height:59px; margin:auto; display:grid; place-items:center; border-radius:20px; background:white; color:#1769bb; font-size:31px; box-shadow:0 7px 21px #a8c9df55; }
+  .hero h1 { margin:.65rem 0 .2rem; font-size:1.82rem; font-weight:800; letter-spacing:.05em; }
+  .lead { font-size:.98rem; line-height:1.8; color:#315a75; margin-bottom:.2rem; }
+  .small-note { text-align:center; color:#668096; font-size:.82rem; line-height:1.65; margin-top:.8rem; }
   .step { color:#3374a8; font-weight:700; font-size:.92rem; letter-spacing:.08em; }
-  .soft-card { border-radius:22px; padding:1.05rem 1.15rem; margin:.7rem 0; border:1px solid #dbe9ef; box-shadow:0 4px 15px #7595a816; }
+  .soft-card { border-radius:17px; padding:.82rem 1rem; margin:.72rem 0 .35rem; border:1px solid #dbe9ef; box-shadow:0 3px 12px #7595a812; }
   .fact { background:#eaf6ff; } .wish { background:#fff0f2; }
   .ask { background:#ecf9f4; } .order { background:#fff8e7; }
-  .cue { background:#fff; border:1px solid #d9e9f2; border-radius:24px; padding:1.4rem; font-size:1.3rem; line-height:1.9; box-shadow:0 8px 24px #7595a820; }
-  div.stButton > button { width:100%; min-height:3.25rem; border-radius:16px; font-weight:700; font-size:1.02rem; }
-  div[data-testid="stTextArea"] textarea { min-height:230px; border-radius:18px; font-size:1.04rem; line-height:1.7; }
+  .cue { background:#fff; border:1px solid #d9e9f2; border-radius:18px; padding:1.25rem; font-size:1.18rem; line-height:1.85; box-shadow:0 6px 18px #7595a81c; }
+  div.stButton > button { width:100%; min-height:3.15rem; border-radius:16px; font-weight:700; font-size:.98rem; }
+  div.stButton > button[kind="primary"] { background:#2f80ed; border-color:#2f80ed; color:white; }
+  div.stButton > button[kind="primary"]:hover { background:#246fce; border-color:#246fce; }
+  div[data-testid="stTextArea"] textarea { min-height:190px; border-radius:17px; font-size:1rem; line-height:1.65; background:#fbfdff; }
   [data-testid="stAudioInput"] { border-radius:18px; }
   .status { padding:.85rem 1rem; background:#edf8f4; border-radius:16px; color:#24634f; }
+  h1 { font-size:1.6rem !important; text-align:center; }
+  h2 { font-size:1.35rem !important; text-align:center; }
+  h3 { font-size:1.12rem !important; }
+  [data-testid="stImage"] img { display:block; margin:auto; }
+  @media (max-width:480px){ .block-container{max-width:100%;box-shadow:none;border:0;} }
 </style>
 """,
     unsafe_allow_html=True,
@@ -167,21 +176,24 @@ screen = st.session_state.screen
 
 if screen == "start":
     st.markdown('<div class="hero"><div class="hero-icon">💬</div><h1>おつたえシート</h1><p class="lead"><b>話す前に、伝えたいことを整理します。</b><br><br>まとまっていなくても大丈夫です。<br>まず、そのまま話してください。</p></div>', unsafe_allow_html=True)
-    st.write("")
-    if st.button("🎤　話して入力する", type="primary"):
+    side1, middle, side2 = st.columns([1.15, 2, 1.15])
+    middle.image("assets/hero_woman.png", use_container_width=True)
+    if st.button("🎤　話して入力する", type="primary", use_container_width=True):
         st.session_state.input_mode = "voice"; go("input")
-    if st.button("⌨️　文字で入力する"):
+    if st.button("⌨️　文字で入力する", use_container_width=True):
         st.session_state.input_mode = "text"; go("input")
     st.markdown('<p class="small-note">上司・学校・病院・役所・家族など、いろいろな場面で使えます。</p>', unsafe_allow_html=True)
 
 elif screen == "input":
     st.button("← 戻る", on_click=lambda: go("start"))
     st.markdown('<p class="step">STEP 1 / 4　自由に入力</p>', unsafe_allow_html=True)
-    st.header("まとまっていなくても大丈夫です")
+    st.header("入力する")
+    st.markdown('<div class="soft-card fact" style="text-align:center"><b>まとまっていなくても大丈夫。<br>まず、そのまま話してください。</b></div>', unsafe_allow_html=True)
     st.write("順番を気にせず、思いついたことをそのまま入力してください。")
     audio = None
     if st.session_state.input_mode == "voice":
         st.info("うまく話そうとしなくて大丈夫です。")
+        st.markdown('<div style="width:110px;height:110px;margin:8px auto 12px;border-radius:55px;background:linear-gradient(145deg,#439af6,#186ee8);display:grid;place-items:center;color:white;font-size:48px;box-shadow:0 10px 25px #2f80ed55">🎤</div>', unsafe_allow_html=True)
         audio = st.audio_input("🎤 ここを押して話す")
         st.caption("録音後に、補足したいことがあれば下にも入力できます。")
     st.session_state.raw_text = st.text_area("伝えたいこと", st.session_state.raw_text, placeholder="例：先週から頭が痛くて、火曜日は少し気持ち悪くなりました。薬を飲むと少し楽になります。原因と検査が必要かを聞きたいです。")
@@ -210,6 +222,7 @@ elif screen == "review":
 elif screen == "cue":
     st.markdown('<p class="step">STEP 4 / 4　おつたえカンペ</p>', unsafe_allow_html=True)
     st.header("これを見ながら話せます")
+    st.markdown('<div class="status" style="text-align:center">✨ 準備はできました。きっと、うまく伝わります。</div>', unsafe_allow_html=True)
     mode = st.session_state.cue_mode
     c1, c2, c3 = st.columns(3)
     if c1.button("もっと短く", type="primary" if mode == "15秒" else "secondary"):
